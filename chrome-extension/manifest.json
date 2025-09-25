@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "AdBlockX - Prototype",
+  "version": "0.1.0",
+  "description": "Prototype manifest demonstrating how to move service-worker-level blocking into a browser extension.",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "webRequest",
+    "webRequestBlocking",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "extension-background.js"
+  },
+  "action": {
+    "default_title": "AdBlockX Prototype",
+    "default_popup": "popup.html"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "AdBlockerX (experimental)",
+  "version": "0.0.1",
+  "description": "Prototype AdBlockerX runtime (experimental WebExtension scaffold)",
+  "background": { "scripts": ["background.js"] },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "<all_urls>", "tabs"]
+}

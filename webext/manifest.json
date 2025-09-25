@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "AdBlockerX (scaffold)",
+  "version": "0.0.1",
+  "description": "Minimal scaffold to port AdBlockerX runtime to a browser extension",
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "tabs", "scripting", "notifications"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "AdBlockerX" },
+  "content_scripts": [
+    { "matches": ["<all_urls>"], "js": ["content-script.js"], "run_at": "document_start" }
+  ]
+}

@@ -1,0 +1,1049 @@
+ <!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="description" content="AdBlockX - Ultimate Rage Mode Ad Blocker. Dominate ads with military precision. YouTube-focused ad annihilation with advanced filtering, spoofing, and network-level decimation.">
+  <meta name="keywords" content="ad blocker, adblock, youtube ad blocker, adblocker, rage mode, military ad blocker, advanced filtering, network blocking">
+  <meta name="author" content="AdBlockX Team">
+  <meta name="robots" content="index, follow">
+  <!-- Server will inject theme meta for supported clients at runtime -->
+  <script>
+    // Capability probe: attempt to detect theme-color support using userAgentData when available
+    (function(){
+      try {
+        // if cookie already set, skip
+        if (document.cookie && /(?:^|;\s*)abx_theme=/.test(document.cookie)) return;
+        var themeSupport = false;
+        try {
+          if (navigator.userAgentData && navigator.userAgentData.brands) {
+            // consider Chromium-based brands as supporting theme-color
+            themeSupport = navigator.userAgentData.brands.some(b=>/Chromium|Google|Microsoft Edge|Google Chrome/i.test(b.brand));
+          } else {
+            // fallback UA check (fast) when userAgentData is unavailable
+            themeSupport = /Chrome|Chromium|Edg|CriOS|Android/i.test(navigator.userAgent || '');
+          }
+        } catch(e) { themeSupport = /Chrome|Chromium|Edg|CriOS|Android/i.test(navigator.userAgent || ''); }
+
+        // Post to server so server can set a cookie and inject meta on reload
+        try {
+          fetch('/api/capabilities', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ themeSupport: !!themeSupport }) }).then(()=>{
+            // reload so server-injected meta is present
+            try { if (!/abx_theme/.test(document.cookie)) location.reload(); } catch(e) {}
+          }).catch(()=>{});
+        } catch(e) {}
+      } catch(e) {}
+    })();
+  </script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AdBlockX">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://adblockx.com/">
+  <meta property="og:title" content="AdBlockX - Rage Mode Ad Blocker">
+  <meta property="og:description" content="Ultimate ad blocking with military precision. Dominate YouTube ads and beyond.">
+  <meta property="og:image" content="https://adblockx.com/og-image.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://adblockx.com/">
+  <meta property="twitter:title" content="AdBlockX - Rage Mode Ad Blocker">
+  <meta property="twitter:description" content="Ultimate ad blocking with military precision. Dominate YouTube ads and beyond.">
+  <meta property="twitter:image" content="https://adblockx.com/twitter-image.png">
+
+  <!-- Security -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' http://127.0.0.1:4000 https://api.adblockx.com; frame-src 'self' https://www.youtube.com;">
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+  <title>AdBlockX - RAGE MODE</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%23ff0000' rx='4'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='white' font-family='Arial' font-size='16' font-weight='bold'%3E⚡%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' fill='%23ff0000' rx='40'/%3E%3Ctext x='90' y='110' text-anchor='middle' fill='white' font-family='Arial' font-size='80' font-weight='bold'%3E⚡%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Inline early bootstrap: call window.AdBlockX.earlyAttach as early as possible
+       This helps install minimal conservative fetch/XHR hooks before third-party
+       scripts run. Keep it tiny and self-contained so it can run from <head>. -->
+  <script>
+    (function(){
+      try {
+        if (window.AdBlockX && typeof window.AdBlockX.earlyAttach === 'function') {
+          window.AdBlockX.earlyAttach({ installHooks: true });
+        } else {
+          window.AdBlockX = window.AdBlockX || {};
+          if (!window.AdBlockX.earlyAttach) {
+            window.AdBlockX.earlyAttach = function(opts){ try{ window.AdBlockX.__earlyAttached = true; return true;}catch(e){return false;} };
+          }
+          try { window.AdBlockX.earlyAttach({ installHooks: true }); } catch(e){}
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-red-600 focus:text-white focus:rounded focus:shadow-lg focus:ring-2 focus:ring-red-400">Skip to main content</a>
+
+  <!-- ENHANCED CHAOS OVERLAY - ULTIMATE RAGE VISUALS -->
+  <div class="chaos-overlay" aria-hidden="true">
+    <div class="floating-skull animate-float-slow">💀</div>
+    <div class="floating-flame animate-float-medium">🔥</div>
+    <div class="floating-lightning animate-float-fast">⚡</div>
+    <div class="floating-explosion animate-pulse-glow">💥</div>
+    <div class="floating-target animate-spin-slow">🎯</div>
+    <div class="blood-drip-effect animate-drip"></div>
+    <div class="rage-particles animate-particle-drift"></div>
+    <div class="energy-waves animate-wave-pulse"></div>
+  </div>
+
+  <!-- SCROLL PROGRESS INDICATOR -->
+  <div class="scroll-progress" aria-hidden="true">
+    <div class="scroll-progress-bar"></div>
+  </div>
+
+  <main id="main-content" class="container animate-fade-in" role="main" aria-labelledby="app-title">
+    <!-- ENHANCED RAGE MODE TITLE BAR - VISUAL CHAOS UPGRADED -->
+    <div class="rage-title-bar animate-slide-down" aria-hidden="true">
+      <h1 class="animate-glow-pulse">ADBLOCKX - RAGE MODE</h1>
+      <div class="subtitle animate-text-shimmer">ULTIMATE AD ANNIHILATION SYSTEM</div>
+      <div class="spark-effect animate-spark-burst">✨</div>
+      <div class="glow-effect animate-rage-glow"></div>
+      <div class="title-particles animate-particle-explosion"></div>
+    </div>
+
+    <header class="top animate-slide-up" role="banner">
+      <div class="top-left">
+        <h1 id="app-title" class="brand animate-brand-pulse" aria-label="AdBlockX Rage Mode Ad Blocker">
+          <span class="rage-prefix animate-electric" aria-hidden="true">⚡</span>
+          <span class="brand-text animate-text-wave">ADBLOCKX</span>
+          <span class="rage-suffix animate-skull-bounce" aria-hidden="true">💀</span>
+        </h1>
+        <div class="muted hellfire-text rage-subtitle animate-subtitle-fade" data-text="FURY PROTOCOL ENGAGED" aria-live="polite">FURY PROTOCOL ENGAGED</div>
+        <div id="serviceStatus" class="status-indicator dormant animate-status-pulse" role="status" aria-live="polite" aria-label="Service status">
+          <span class="status-dot status-stopped animate-dot-pulse" aria-hidden="true"></span>
+          <span id="svcRunning" class="animate-text-fade" aria-label="Current service state">DORMANT</span>
+        </div>
+      </div>
+      <nav class="top-right animate-slide-left" role="navigation" aria-label="Primary controls">
+        <button id="themeToggle" class="small ghost animate-button-hover" aria-label="Toggle theme mode" title="Switch between rage and calm themes">
+          <span class="button-icon animate-icon-spin" aria-hidden="true">🎭</span>
+          <span class="button-text">THEME</span>
+        </button>
+        <button id="startServices" class="small rage-button animate-button-engage" aria-label="Start all battle systems" title="Engage proxy and war agent">
+          <span class="button-icon animate-electric-bolt" aria-hidden="true">⚡</span>
+          <span class="button-text">ENGAGE</span>
+          <span class="button-sparks animate-spark-shower" aria-hidden="true">✨</span>
+          <span class="button-flames animate-flame-flicker" aria-hidden="true">🔥</span>
+        </button>
+        <button id="stopServices" class="small ghost rage-button-ghost animate-button-disengage" aria-label="Stop all battle systems" title="Disengage proxy and war agent">
+          <span class="button-icon animate-skull-shake" aria-hidden="true">💀</span>
+          <span class="button-text">DISENGAGE</span>
+          <span class="button-sparks animate-spark-shower" aria-hidden="true">✨</span>
+          <span class="button-blood animate-blood-drip" aria-hidden="true">🩸</span>
+        </button>
+      </nav>
+    </header>
+
+    <section class="grid animate-grid-reveal">
+      <div class="grid-column-left">
+        <section class="card animate-card-slide-right" aria-labelledby="war-controls-heading">
+          <div class="card-header animate-header-glow">
+            <h2 id="war-controls-heading" class="hellfire-text animate-text-burn" data-text="WAR CONTROLS">WAR CONTROLS</h2>
+            <div class="card-decoration animate-decoration-pulse" aria-hidden="true">⚔️</div>
+          </div>
+          <form class="control-form animate-form-fade" novalidate>
+            <div class="form-group animate-form-group">
+              <label for="wrath-status" class="hellfire-text animate-label-shine" data-text="WRATH STATUS">WRATH STATUS</label>
+              <div class="control-row animate-control-row">
+                <button id="toggleEnable" type="button" class="small animate-button-fury" aria-label="Toggle AdBlockX core systems" title="Enable/disable ad blocking">
+                  <span class="button-content">TOGGLE FURY</span>
+                  <span class="button-energy animate-energy-wave" aria-hidden="true">⚡</span>
+                </button>
+                <div id="enabledLabel" class="status-display animate-status-display" aria-live="polite" role="status">—</div>
+              </div>
+            </div>
+
+            <div class="form-group animate-form-group">
+              <label for="battle-ops" class="hellfire-text animate-label-shine" data-text="BATTLE OPS">BATTLE OPS</label>
+              <div class="control-row animate-control-row">
+                <button id="openYoutube" type="button" class="small ghost animate-button-storm" aria-label="Open YouTube in battle mode" title="Launch YouTube with active blocking">
+                  <span class="button-content">STORM YOUTUBE</span>
+                  <span class="button-storm animate-storm-effect" aria-hidden="true">🌪️</span>
+                </button>
+                <button id="injectRuntime" type="button" class="small animate-button-venom" aria-label="Inject AdBlockX runtime into current page" title="Deploy venom into active page">
+                  <span class="button-content">INJECT VENOM</span>
+                  <span class="button-venom animate-venom-drip" aria-hidden="true">🧪</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group animate-form-group">
+              <label for="network-siege" class="hellfire-text animate-label-shine" data-text="NETWORK SIEGE">NETWORK SIEGE</label>
+              <div class="control-row animate-control-row">
+                <label for="netBlocking" class="checkbox-label animate-checkbox-label">
+                  <input type="checkbox" id="netBlocking" class="animate-checkbox" aria-label="Enable network-level ad decimation" title="Block ads at network level">
+                  <span class="checkbox-text hellfire-text animate-checkbox-text" data-text="ENABLE DECIMATION">ENABLE DECIMATION</span>
+                  <span class="checkbox-icon animate-checkbox-icon" aria-hidden="true">💣</span>
+                </label>
+                <button id="applyFilters" type="button" class="small animate-button-deploy" aria-label="Apply current filter rules" title="Deploy active filters">
+                  <span class="button-content">UNLEASH FILTERS</span>
+                  <span class="button-deploy animate-deploy-effect" aria-hidden="true">🚀</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group animate-form-group">
+              <label for="premium-rage" class="hellfire-text animate-label-shine" data-text="PREMIUM RAGE">PREMIUM RAGE</label>
+              <div class="control-row animate-control-row">
+                <button id="buyPaddle" type="button" class="small animate-button-premium" aria-label="Purchase premium via Paddle" title="Acquire premium license">
+                  <span class="button-content">ACQUIRE (PADDLE)</span>
+                  <span class="button-premium animate-premium-sparkle" aria-hidden="true">💎</span>
+                </button>
+                <button id="buyStripe" type="button" class="small ghost animate-button-premium-alt" aria-label="Purchase premium via Stripe" title="Acquire premium license">
+                  <span class="button-content">ACQUIRE (STRIPE)</span>
+                  <span class="button-premium-alt animate-premium-glow" aria-hidden="true">💳</span>
+                </button>
+                <button id="restorePurchase" type="button" class="small ghost animate-button-restore" aria-label="Restore previous purchase" title="Recover lost license">
+                  <span class="button-content">RESTORE POWER</span>
+                  <span class="button-restore animate-restore-pulse" aria-hidden="true">🔄</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group animate-form-group">
+              <label for="watchdog" class="hellfire-text animate-label-shine" data-text="WATCHDOG">WATCHDOG</label>
+              <div class="control-row animate-control-row">
+                <button id="toggleWatchdog" type="button" class="small ghost animate-button-guardian" aria-label="Toggle watchdog monitoring" title="Enable/disable ad hunting">
+                  <span class="button-content">TOGGLE GUARDIAN</span>
+                  <span class="button-guardian animate-guardian-eye" aria-hidden="true">👁️</span>
+                </button>
+                <div id="watchdogLabel" class="status-display animate-status-display" aria-live="polite" role="status">—</div>
+              </div>
+            </div>
+
+            <div class="form-group animate-form-group">
+              <label for="hypernova" class="hellfire-text animate-label-shine" data-text="HYPERNOVA">HYPERNOVA</label>
+              <div class="control-row animate-control-row">
+                <button id="enableHyper" type="button" class="small animate-button-hyper" aria-label="Activate hypernova mode" title="Enable aggressive DOM annihilation">
+                  <span class="button-content">ACTIVATE</span>
+                  <span class="button-hyper animate-hyper-nova" aria-hidden="true">🌟</span>
+                </button>
+                <button id="disableHyper" type="button" class="small ghost animate-button-hyper-off" aria-label="Deactivate hypernova mode" title="Disable aggressive DOM annihilation">
+                  <span class="button-content">DEACTIVATE</span>
+                  <span class="button-hyper-off animate-hyper-fade" aria-hidden="true">🌑</span>
+                </button>
+              </div>
+            </div>
+
+            <hr class="section-divider animate-divider-burn" aria-hidden="true">
+
+            <h3 class="hellfire-text animate-section-title" data-text="REMOTE COMMAND">REMOTE COMMAND</h3>
+            <div class="form-group animate-form-group">
+              <label for="proxyUrl" class="hellfire-text animate-label-shine" data-text="PROXY CHANNEL">PROXY CHANNEL</label>
+              <div class="input-row animate-input-row">
+                <input id="proxyUrl" type="url" placeholder="http://127.0.0.1:4000" class="animate-input-focus" aria-label="Proxy server URL" title="Remote proxy endpoint">
+                <button id="testConn" type="button" class="animate-button-test" aria-label="Test proxy connection" title="Verify proxy link">
+                  <span class="button-content">TEST LINK</span>
+                  <span class="button-test animate-test-signal" aria-hidden="true">📡</span>
+                </button>
+              </div>
+            </div>
+            <div class="form-group animate-form-group">
+              <label for="apiKey" class="hellfire-text animate-label-shine" data-text="ACCESS KEY">ACCESS KEY</label>
+              <input id="apiKey" type="password" placeholder="authorization-key" class="animate-input-focus" aria-label="API access key" title="Authentication token">
+            </div>
+          </form>
+        </section>
+
+        <section class="card" aria-labelledby="feature-arsenal-heading">
+          <h2 id="feature-arsenal-heading" class="hellfire-text" data-text="FEATURE ARSENAL">FEATURE ARSENAL</h2>
+          <p class="muted hellfire-text" data-text="Toggle destructive capabilities. Changes persist across battles." aria-describedby="feature-description">Toggle destructive capabilities. Changes persist across battles.</p>
+          <div id="featureToggles" role="group" aria-label="Feature toggles" aria-describedby="feature-description">
+            <!-- toggles injected by script -->
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="filter-weaponry-heading">
+          <h2 id="filter-weaponry-heading" class="hellfire-text" data-text="FILTER WEAPONRY">FILTER WEAPONRY</h2>
+          <p class="muted hellfire-text" data-text="One target per line. Use '/' delimiters for regex destruction." aria-describedby="filter-description">One target per line. Use '/' delimiters for regex destruction.</p>
+          <form class="filter-form" novalidate>
+            <label for="filterEditor" class="sr-only">Filter rules editor</label>
+            <textarea id="filterEditor" placeholder="example.com\/ads\n/.*doubleclick\\.net/" class="filter-editor" aria-label="Filter rules editor" aria-describedby="filter-description"></textarea>
+            <div class="row">
+              <button id="applyFiltersBtn" type="button" class="small" aria-label="Deploy filter rules" title="Apply current filters">DEPLOY</button>
+              <button id="clearFiltersBtn" type="button" class="small ghost" aria-label="Clear all filter rules" title="Remove all filters">PURGE</button>
+              <div class="flex-spacer text-right muted hellfire-text" data-text="ELIMINATED:" aria-live="polite" role="status">ELIMINATED: <span id="blockedCount" aria-label="Number of blocked items">0</span></div>
+            </div>
+          </form>
+        </section>
+
+        <section class="card" aria-labelledby="subscription-army-heading">
+          <h2 id="subscription-army-heading" class="hellfire-text" data-text="SUBSCRIPTION ARMY">SUBSCRIPTION ARMY</h2>
+          <form class="subscription-form" novalidate>
+            <div class="row">
+              <label for="subUrl" class="sr-only">Subscription URL</label>
+              <input id="subUrl" type="url" placeholder="https://example.com/blacklist.txt" aria-label="Subscription list URL" title="URL of filter list to add">
+              <button id="addSub" type="button" aria-label="Add subscription" title="Conscript new battalion">CONSCRIPT</button>
+            </div>
+          </form>
+          <p class="muted hellfire-text" data-text="Manage filter list battalions." aria-describedby="subscription-description">Manage filter list battalions.</p>
+          <div>
+            <button id="subsRefresh" type="button" class="small ghost" aria-label="Update all subscriptions" title="Refresh filter armies">UPDATE FORCES</button>
+            <div id="subsList" role="list" aria-label="Active subscriptions" aria-describedby="subscription-description"></div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="battle-logs-heading">
+          <h2 id="battle-logs-heading" class="hellfire-text" data-text="BATTLE LOGS">BATTLE LOGS</h2>
+          <nav class="row" role="navigation" aria-label="Log actions">
+            <button id="openInspector" type="button" class="small ghost" aria-label="Open detailed battle inspector" title="View intelligence reports">OPEN INTEL</button>
+            <button id="clearLogs" type="button" class="small ghost" aria-label="Clear battle logs" title="Purge battle records">PURGE LOGS</button>
+            <button id="exportLogs" type="button" class="small" aria-label="Export battle logs" title="Extract battle data">EXTRACT DATA</button>
+            <div class="flex-spacer text-right muted hellfire-text" data-text="Local war records" aria-live="polite">Local war records</div>
+          </nav>
+          <div id="logs" role="log" aria-label="Battle activity log" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <div>
+        <section class="card" aria-labelledby="list-armory-heading">
+          <h2 id="list-armory-heading" class="hellfire-text" data-text="LIST ARMORY">LIST ARMORY</h2>
+          <div class="tabs" role="tablist" aria-label="Filter list categories">
+            <button class="tab active hellfire-text" role="tab" aria-selected="true" data-tab="blacklist" data-text="BLACKLIST" aria-controls="editorArea" id="tab-blacklist">BLACKLIST</button>
+            <button class="tab hellfire-text" role="tab" aria-selected="false" data-tab="spoof" data-text="SPOOF_LIST" aria-controls="editorArea" id="tab-spoof">SPOOF_LIST</button>
+            <button class="tab hellfire-text" role="tab" aria-selected="false" data-tab="whitelist" data-text="WHITELIST" aria-controls="editorArea" id="tab-whitelist">WHITELIST</button>
+            <button class="tab hellfire-text" role="tab" aria-selected="false" data-tab="regex" data-text="REGEX_RULES" aria-controls="editorArea" id="tab-regex">REGEX_RULES</button>
+          </div>
+
+          <div id="editorArea" role="tabpanel" aria-labelledby="tab-blacklist">
+            <div>
+              <p class="muted hellfire-text" data-text="One target per line. Changes forged in battle storage." aria-describedby="editor-description">One target per line. Changes forged in battle storage.</p>
+              <label for="listEditor" class="sr-only">List editor</label>
+              <textarea id="listEditor" placeholder="Enter destruction patterns, one per line" aria-label="List editor" aria-describedby="editor-description"></textarea>
+              <div class="row">
+                <button id="saveList" type="button" class="small" aria-label="Save current list" title="Forge weapons">FORGE</button>
+                <button id="resetList" type="button" class="small ghost" aria-label="Reset to defaults" title="Return to factory settings">RESET TO DEFAULTS</button>
+                <div class="flex-spacer"></div>
+                <div class="muted hellfire-text" data-text="ARSENAL:" aria-live="polite" role="status">ARSENAL: <span id="currentCount" aria-label="Current weapon count">0</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="quick-strikes-heading">
+          <h2 id="quick-strikes-heading" class="hellfire-text" data-text="QUICK STRIKES">QUICK STRIKES</h2>
+          <nav class="row" role="navigation" aria-label="Quick action controls">
+            <button id="insertBait" type="button" class="small ghost" aria-label="Deploy enemy bait" title="Create detectable element">DEPLOY BAIT</button>
+            <button id="simulateAnti" type="button" class="small" aria-label="Simulate anti-adblock detection" title="Test enemy countermeasures">SIMULATE ENEMY</button>
+          </nav>
+          <p class="muted hellfire-text" data-text="Battle testing for runtime reaction to hostile DOM changes." aria-describedby="testing-description">Battle testing for runtime reaction to hostile DOM changes.</p>
+        </section>
+      </div>
+    </section>
+
+    <footer class="hellfire-text" data-text="Use ENGAGE to activate bundled proxy and war agent. Controls dominate localStorage and injected runtime." role="contentinfo">
+      Use <kbd class="kbd">ENGAGE</kbd> to activate bundled proxy and war agent. Controls dominate localStorage and injected runtime.
+    </footer>
+  </main>
+
+  <!-- Toast notifications -->
+  <div id="abxToast" class="abx-toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- Battle Inspector Modal -->
+  <div id="inspectorModal" class="inspector-modal" role="dialog" aria-modal="true" aria-labelledby="inspector-title" aria-describedby="inspector-description">
+    <div class="inspector-pane">
+      <header class="inspector-header">
+        <div>
+          <h2 id="inspector-title">BATTLE INSPECTOR</h2>
+          <p id="inspector-description" class="muted">Per-request traces, filtering, and intelligence export</p>
+        </div>
+        <nav role="navigation" aria-label="Inspector actions">
+          <button id="inspectorClose" type="button" class="small ghost" aria-label="Close battle inspector">CLOSE</button>
+          <button id="inspectorExport" type="button" class="small" aria-label="Export battle intelligence">EXTRACT</button>
+        </nav>
+      </header>
+      <div class="inspector-body">
+        <section class="inspector-left" aria-labelledby="inspector-list-heading">
+          <h3 id="inspector-list-heading" class="sr-only">Battle Records</h3>
+          <form class="row" role="search" aria-label="Filter battle records">
+            <label for="inspectorFilter" class="sr-only">Filter records</label>
+            <input id="inspectorFilter" class="inspector-input" type="text" placeholder="filter by url, rule, or type" aria-label="Filter battle records">
+            <label for="inspectorType" class="sr-only">Filter by type</label>
+            <select id="inspectorType" class="inspector-select" title="Filter by request type" aria-label="Filter by request type">
+              <option value="all">All</option>
+              <option value="blocked">Blocked</option>
+              <option value="spoofed">Spoofed</option>
+              <option value="observed">Observed</option>
+            </select>
+            <button id="inspectorRefresh" type="button" class="small ghost" aria-label="Refresh battle records">REFRESH</button>
+          </form>
+          <div id="inspectorList" class="inspector-list" role="list" aria-label="Filtered battle records"></div>
+        </section>
+        <section class="flex-spacer min-width-320" aria-labelledby="inspector-detail-heading">
+          <h3 id="inspector-detail-heading" class="sr-only">Battle Details</h3>
+          <div class="inspector-detail">
+            <pre id="inspectorDetail" role="log" aria-live="polite">Select an entry to see battle details</pre>
+          </div>
+          <div class="row margin-top-15">
+            <div class="muted" aria-live="polite">INTEL SUMMARY:</div>
+            <div id="inspectorSummary" class="muted" aria-live="polite" role="status">—</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fallback for users without JavaScript -->
+  <noscript>
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff0000; color: white; padding: 20px; border-radius: 10px; text-align: center; z-index: 10000; box-shadow: 0 0 20px rgba(255,0,0,0.8);">
+      <h2>⚡ RAGE MODE REQUIRES JAVASCRIPT ⚡</h2>
+      <p>AdBlockX needs JavaScript to unleash its full destructive potential.</p>
+      <p>Please enable JavaScript and reload to engage battle systems.</p>
+    </div>
+  </noscript>
+
+  <script>
+    // Global error handler for better debugging
+    window.addEventListener('error', function(e) {
+      console.error('AdBlockX Runtime Error:', e.error);
+      // Could send to error reporting service in production
+    });
+
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('AdBlockX Unhandled Promise Rejection:', e.reason);
+      // Could send to error reporting service in production
+    });
+    // --- Helpers to read/write localStorage keys used by AdBlockX runtime ---
+    function loadJSON(key, fallback){ try{ const v=localStorage.getItem(key); if(!v) return fallback; return JSON.parse(v); }catch(e){ return fallback; } }
+    function saveJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+    // default keys used in AdBlockX.js — we will treat them carefully
+    const KEYS = { BLACKLIST:'AdBlockX.BLACKLIST', SPOOF:'AdBlockX.SPOOF_LIST', WHITELIST:'AdBlockX.WHITELIST', REGEX:'AdBlockX.REGEX_RULES', ENABLED:'AdBlockX.ENABLED', WATCHDOG:'AdBlockX.WATCHDOG_ENABLED', HYPER:'AdBlockX.HYPERNOVA' };
+
+    // UI Elements
+    const startBtn = document.getElementById('startServices');
+    const stopBtn = document.getElementById('stopServices');
+    const svcLabel = document.getElementById('svcRunning');
+    const toggleEnable = document.getElementById('toggleEnable');
+    const enabledLabel = document.getElementById('enabledLabel');
+    const toggleWatchdog = document.getElementById('toggleWatchdog');
+    const watchdogLabel = document.getElementById('watchdogLabel');
+    const enableHyper = document.getElementById('enableHyper');
+    const disableHyper = document.getElementById('disableHyper');
+    const proxyUrl = document.getElementById('proxyUrl');
+    const apiKey = document.getElementById('apiKey');
+    const testConn = document.getElementById('testConn');
+    const logsEl = document.getElementById('logs');
+    const clearLogs = document.getElementById('clearLogs');
+    const exportLogs = document.getElementById('exportLogs');
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const listEditor = document.getElementById('listEditor');
+    const saveList = document.getElementById('saveList');
+    const resetList = document.getElementById('resetList');
+    const currentCount = document.getElementById('currentCount');
+    const insertBait = document.getElementById('insertBait');
+    const simulateAnti = document.getElementById('simulateAnti');
+    const netBlocking = document.getElementById('netBlocking');
+    const applyFilters = document.getElementById('applyFilters');
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+    const filterEditor = document.getElementById('filterEditor');
+    const blockedCountEl = document.getElementById('blockedCount');
+    const subUrl = document.getElementById('subUrl');
+    const addSub = document.getElementById('addSub');
+
+    let activeTab = 'blacklist';
+
+    function setSvcLabel(running){ 
+      const statusEl = document.getElementById('serviceStatus');
+      const svcLabel = document.getElementById('svcRunning');
+      const statusDot = statusEl.querySelector('.status-dot');
+      
+      svcLabel.textContent = running ? 'ACTIVE' : 'DORMANT'; 
+      statusEl.className = running ? 'status-indicator active' : 'status-indicator dormant';
+      statusDot.className = running ? 'status-dot status-running' : 'status-dot status-stopped';
+    }
+
+    // initialize form values from localStorage
+    function refreshRuntimeStatus(){
+      const enabled = !!loadJSON(KEYS.ENABLED, true);
+      enabledLabel.textContent = enabled ? 'UNLEASHED' : 'CONTAINED';
+      const watchdog = !!loadJSON(KEYS.WATCHDOG, false);
+      watchdogLabel.textContent = watchdog ? 'HUNTING' : 'SLEEPING';
+      setSvcLabel(false);
+    }
+
+    function loadTab(tab){ activeTab = tab; tabs.forEach(t=>{ const is = t.dataset.tab===tab; t.classList.toggle('active', is); t.setAttribute('aria-selected', is ? 'true' : 'false'); });
+      let data = [];
+      if(tab==='blacklist') data = loadJSON(KEYS.BLACKLIST, []);
+      if(tab==='spoof') data = loadJSON(KEYS.SPOOF, []);
+      if(tab==='whitelist') data = loadJSON(KEYS.WHITELIST, []);
+      if(tab==='regex') data = loadJSON(KEYS.REGEX, []);
+      listEditor.value = (data||[]).join('\n');
+      currentCount.textContent = (data||[]).length;
+    }
+
+    tabs.forEach(t=>t.addEventListener('click', ()=>loadTab(t.dataset.tab)));
+
+    saveList.addEventListener('click', ()=>{
+      const lines = listEditor.value.split(/\r?\n/).map(s=>s.trim()).filter(s=>s);
+      if(activeTab==='blacklist') saveJSON(KEYS.BLACKLIST, lines);
+      if(activeTab==='spoof') saveJSON(KEYS.SPOOF, lines);
+      if(activeTab==='whitelist') saveJSON(KEYS.WHITELIST, lines);
+      if(activeTab==='regex') saveJSON(KEYS.REGEX, lines);
+      currentCount.textContent = lines.length;
+      showToast('FORGED ' + lines.length + ' WEAPONS IN ' + activeTab.toUpperCase());
+      // try to notify runtime via event
+      try{ window.dispatchEvent(new CustomEvent('AdBlockX:event', { detail: { type:'lists-updated', list: activeTab } })); }catch(e){}
+      // propagate updated lists to the content window so runtime there can pick it up
+      try{ const obj = {};
+        if(activeTab==='blacklist') obj[KEYS.BLACKLIST] = lines;
+        if(activeTab==='spoof') obj[KEYS.SPOOF] = lines;
+        if(activeTab==='whitelist') obj[KEYS.WHITELIST] = lines;
+        if(activeTab==='regex') obj[KEYS.REGEX] = lines;
+        if(window.adblockxBridge && window.adblockxBridge.propagateSettings) window.adblockxBridge.propagateSettings(obj);
+      }catch(e){}
+    });
+
+    resetList.addEventListener('click', ()=>{
+      if(!confirm('RESET ARSENAL TO FACTORY DEFAULTS? This will destroy local modifications.')) return;
+      // fallback: remove key so runtime uses defaults embedded in script
+      if(activeTab==='blacklist') localStorage.removeItem(KEYS.BLACKLIST);
+      if(activeTab==='spoof') localStorage.removeItem(KEYS.SPOOF);
+      if(activeTab==='whitelist') localStorage.removeItem(KEYS.WHITELIST);
+      if(activeTab==='regex') localStorage.removeItem(KEYS.REGEX);
+      loadTab(activeTab);
+    });
+
+    toggleEnable.addEventListener('click', ()=>{
+      const v = !!loadJSON(KEYS.ENABLED, true);
+      saveJSON(KEYS.ENABLED, !v);
+      refreshRuntimeStatus();
+      // propagate enabled toggle
+      try{ if(window.adblockxBridge && window.adblockxBridge.propagateSettings) window.adblockxBridge.propagateSettings({ [KEYS.ENABLED]: !v }); }catch(e){}
+    });
+    toggleWatchdog.addEventListener('click', ()=>{ const v = !!loadJSON(KEYS.WATCHDOG, false); saveJSON(KEYS.WATCHDOG, !v); refreshRuntimeStatus(); });
+    enableHyper.addEventListener('click', ()=>{ saveJSON(KEYS.HYPER, true); showToast('HYPERNOVA ENGAGED (will activate in page runtime)'); });
+    disableHyper.addEventListener('click', ()=>{ saveJSON(KEYS.HYPER, false); showToast('HYPERNOVA DISENGAGED'); });
+
+    // open YouTube in content window
+    const openYoutubeBtn = document.getElementById('openYoutube');
+    openYoutubeBtn.addEventListener('click', async ()=>{ try{ await window.adblockxBridge.navigateContent('https://www.youtube.com'); }catch(e){ showToast('YOUTUBE STORM FAILED: '+e); } });
+
+    // inject runtime into content window
+    const injectBtn = document.getElementById('injectRuntime');
+    injectBtn.addEventListener('click', async ()=>{ try{ const ok = await window.adblockxBridge.injectRuntime(); showToast(ok ? 'VENOM INJECTED' : 'INJECTION FAILED'); }catch(e){ showToast('INJECT FAILED: '+e); } });
+
+    startBtn.addEventListener('click', async ()=>{
+      try{ await window.adblockxBridge.startServices(); setSvcLabel(true); showToast('BATTLE SYSTEMS ENGAGED'); }catch(e){ showToast('ENGAGEMENT FAILED: '+e); }
+    });
+    // Licensing UI wiring
+    const buyPaddle = document.getElementById('buyPaddle');
+    const buyStripe = document.getElementById('buyStripe');
+    const restoreBtn = document.getElementById('restorePurchase');
+    const entitlementStatus = document.createElement('div'); entitlementStatus.className='muted'; entitlementStatus.style.marginLeft='10px'; entitlementStatus.textContent='STATUS UNKNOWN';
+    buyPaddle.parentElement.appendChild(entitlementStatus);
+    buyPaddle.addEventListener('click', async ()=>{
+      try{ const r = await window.adblockxBridge.checkoutProvider('paddle'); if(r && r.checkoutUrl) window.open(r.checkoutUrl, '_blank'); }catch(e){ showToast('ACQUISITION FAILED'); }
+    });
+    buyStripe.addEventListener('click', async ()=>{ try{ const r = await window.adblockxBridge.checkoutProvider('stripe'); if(r && r.checkoutUrl) window.open(r.checkoutUrl, '_blank'); }catch(e){ showToast('ACQUISITION FAILED'); } });
+    restoreBtn.addEventListener('click', async ()=>{
+      try{
+        const proof = prompt('ENTER PROOF (dev: userId/email)'); if(!proof) return;
+        const r = await window.adblockxBridge.restorePurchase({ userId: proof });
+        if(r && r.ok){ showToast('POWER RESTORED'); console.log(r); } else showToast('RESTORATION FAILED');
+      }catch(e){ showToast('RESTORATION FAILED'); }
+    });
+
+    // Listen for entitlement updates from main
+    window.addEventListener('abx-entitlement', (ev)=>{
+      try{ const d = ev.detail || {}; if(d && d.canonical){ entitlementStatus.textContent = `ACTIVE: ${d.canonical.plan} until ${new Date(d.canonical.expiresAt).toLocaleString()}`; } else entitlementStatus.textContent = 'NO ACTIVE SUBSCRIPTION'; }catch(e){}
+    });
+
+    // helper to check entitlement for current user (dev prompt)
+    async function checkEntitlementFlow(){ try{ const uid = prompt('ENTER userId/email to check entitlement'); if(!uid) return; const r = await window.adblockxBridge.getEntitlement(uid); if(r && r.ok){ showToast('ENTITLEMENT VERIFIED'); window.dispatchEvent(new CustomEvent('abx-entitlement',{detail:r})); } else showToast('ENTITLEMENT CHECK FAILED'); }catch(e){ showToast('CHECK FAILED'); } }
+    const checkBtn = document.createElement('button'); checkBtn.className='small ghost'; checkBtn.style.marginLeft='10px'; checkBtn.textContent='VERIFY ENTITLEMENT'; 
+    const controlsCard = document.querySelector('.card');
+    if (controlsCard) {
+      const controlsH2 = controlsCard.querySelector('h2');
+      if (controlsH2) controlsH2.after(checkBtn);
+    }
+    checkBtn.addEventListener('click', checkEntitlementFlow);
+    stopBtn.addEventListener('click', async ()=>{ try{ await window.adblockxBridge.stopServices(); setSvcLabel(false); showToast('BATTLE SYSTEMS DISENGAGED'); }catch(e){ showToast('DISENGAGEMENT FAILED: '+e); } });
+
+    // network blocking controls
+    netBlocking.addEventListener('change', async ()=>{
+      try{ await window.adblockxBridge.toggleNetworkBlocking(netBlocking.checked); showToast('NETWORK DECIMATION ' + (netBlocking.checked ? 'ENABLED' : 'DISABLED')); }catch(e){ showToast('FAILED TO TOGGLE NETWORK DECIMATION'); }
+    });
+    applyFilters.addEventListener('click', ()=>{ // quick apply from the action row
+      try{ const lines = (filterEditor.value||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean); window.adblockxBridge.setFilters(lines); showToast('UNLEASHED ' + lines.length + ' FILTERS'); }catch(e){}}
+    );
+    applyFiltersBtn.addEventListener('click', async ()=>{
+      try{ const lines = (filterEditor.value||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean); await window.adblockxBridge.setFilters(lines); await window.adblockxBridge.toggleNetworkBlocking(netBlocking.checked); showToast('FILTERS DEPLOYED'); }catch(e){ showToast('DEPLOYMENT FAILED'); }
+    });
+    clearFiltersBtn.addEventListener('click', async ()=>{ try{ filterEditor.value=''; await window.adblockxBridge.setFilters([]); showToast('FILTERS PURGED'); }catch(e){ showToast('PURGE FAILED'); } });
+
+    // listen for blocked events from main
+    window.addEventListener('abx:block', (ev)=>{
+      try{
+        const d = ev.detail || {}; const url = d.url || ''; const rule = d.rule || '';
+        // update a simple counter and log
+        const c = parseInt(blockedCountEl.textContent||'0',10) + 1; blockedCountEl.textContent = c;
+        const div = document.createElement('div'); div.className='log-entry'; div.textContent = new Date().toISOString() + ' — ELIMINATED ' + url + ' by ' + rule; logsEl.prepend(div);
+      }catch(e){}
+    });
+
+    // subscriptions
+    addSub.addEventListener('click', async ()=>{
+      try{ const url = (subUrl.value||'').trim(); if(!url) return showToast('ENTER SUBSCRIPTION URL'); await window.adblockxBridge.subsAdd({url}); showToast('BATTALION CONSCRIPTED'); subUrl.value=''; }catch(e){ showToast('CONSCRIPTION FAILED'); }
+    });
+
+    // subscriptions list management UI
+    const subsListEl = document.getElementById('subsList');
+    async function refreshSubs(){ try{ const subs = await window.adblockxBridge.subsList(); subsListEl.innerHTML=''; if(!subs || !subs.length){ subsListEl.innerHTML='<div class="muted">NO BATTALIONS</div>'; return; } for(const s of subs){ const div = document.createElement('div'); div.style.display='flex'; div.style.justifyContent='space-between'; div.style.alignItems='center'; div.style.padding='6px 0'; const left = document.createElement('div'); left.innerText = s.url || ''; const right = document.createElement('div'); const st = document.createElement('span'); st.className='muted'; st.style.marginRight='8px'; st.textContent = s.state||''; const rem = document.createElement('button'); rem.textContent='DISCHARGE'; rem.className='small ghost'; rem.addEventListener('click', async ()=>{ if(!confirm('DISCHARGE BATTALION?')) return; await window.adblockxBridge.subsRemove(s.url); refreshSubs(); }); right.appendChild(st); right.appendChild(rem); div.appendChild(left); div.appendChild(right); subsListEl.appendChild(div); } }catch(e){ subsListEl.innerHTML='<div class="muted">LOAD FAILED</div>'; } }
+    document.getElementById('subsRefresh').addEventListener('click', async ()=>{ try{ await window.adblockxBridge.subsUpdateNow(); showToast('UPDATE REQUESTED'); refreshSubs(); }catch(e){ showToast('UPDATE FAILED'); } });
+    // initial subs load
+    refreshSubs();
+
+    // Inspector modal wiring: open modal, refresh list, show details, export
+    const inspectorBtn = document.getElementById('openInspector');
+    const inspectorModal = document.getElementById('inspectorModal');
+    const inspectorClose = document.getElementById('inspectorClose');
+    const inspectorExport = document.getElementById('inspectorExport');
+    const inspectorRefresh = document.getElementById('inspectorRefresh');
+    const inspectorList = document.getElementById('inspectorList');
+    const inspectorDetail = document.getElementById('inspectorDetail');
+    const inspectorFilter = document.getElementById('inspectorFilter');
+    const inspectorType = document.getElementById('inspectorType');
+    const inspectorSummaryEl = document.getElementById('inspectorSummary');
+
+    let INSPECTOR_CACHE = [];
+    let INSPECTOR_OFFSET = 0;
+    const INSPECTOR_PAGE = 100;
+
+    function openInspectorModal(){ inspectorModal.style.display = 'flex'; refreshInspector(); }
+    function closeInspectorModal(){ inspectorModal.style.display = 'none'; inspectorDetail.textContent = 'Select an entry to see battle details'; inspectorList.innerHTML = ''; }
+
+    inspectorBtn.addEventListener('click', async ()=>{ try{ openInspectorModal(); }catch(e){ showToast('INTEL FAILED: '+e); } });
+    inspectorClose.addEventListener('click', ()=>{ try{ closeInspectorModal(); }catch(e){} });
+
+    async function refreshInspector(){
+      try{
+        const s = await window.adblockxBridge.inspectorSummary();
+        inspectorSummaryEl.textContent = 'ELIMINATED: ' + (s.stats?.blockedRequests||0) + ' • RECENT: ' + ((s.recentBlocked||[]).length);
+        // server-side paginated load: offset=0
+        INSPECTOR_OFFSET = 0;
+        const resp = await window.adblockxBridge.queryLogs({ limit: INSPECTOR_PAGE, offset: INSPECTOR_OFFSET, q: inspectorFilter.value, type: inspectorType.value });
+        INSPECTOR_CACHE = Array.isArray(resp.entries) ? resp.entries : [];
+        INSPECTOR_TOTAL = resp.total || 0;
+        renderInspectorList();
+      }catch(e){ console.error('refreshInspector', e); }
+    }
+
+    function matchesFilter(item, text, type){
+      try{
+        if(type && type !== 'all' && item.type !== type) return false;
+        if(!text) return true;
+        const s = String(text).toLowerCase();
+        if((item.url||'').toLowerCase().includes(s)) return true;
+        if((item.rule||'').toLowerCase().includes(s)) return true;
+        if((item.type||'').toLowerCase().includes(s)) return true;
+        return false;
+      }catch(e){ return true; }
+    }
+
+    function renderInspectorList(){
+      try{
+        const q = (inspectorFilter.value||'').trim().toLowerCase();
+        const t = inspectorType.value || 'all';
+        inspectorList.innerHTML = '';
+        const items = INSPECTOR_CACHE.slice().reverse(); // newest first
+        let shown = 0;
+        for(const it of items){ if(!matchesFilter(it, q, t)) continue; shown++; const el = document.createElement('div'); el.style.padding='8px'; el.style.borderBottom='1px solid #333'; el.style.cursor='pointer'; el.style.fontSize='14px'; el.textContent = (it.t||'') + ' — ' + (it.type||'') + ' ' + (it.url||'') + ' ' + (it.rule||''); el.addEventListener('click', async ()=>{ try{ const full = await window.adblockxBridge.getLog(it.id); inspectorDetail.textContent = JSON.stringify(full, null, 2); }catch(e){ inspectorDetail.textContent = 'FAILED TO LOAD BATTLE DETAILS'; } }); inspectorList.appendChild(el); }
+        if(shown===0) inspectorList.innerHTML = '<div class="muted">NO ENTRIES MATCH</div>';
+        // show load more if server reports more entries available
+        if(typeof INSPECTOR_TOTAL !== 'undefined' && (INSPECTOR_OFFSET + INSPECTOR_CACHE.length) < INSPECTOR_TOTAL){
+          const more = document.createElement('div'); more.style.padding='8px'; more.style.textAlign='center'; more.style.cursor='pointer'; more.style.color='#ff3333'; more.textContent = 'LOAD MORE...';
+          more.addEventListener('click', async ()=>{ try{ INSPECTOR_OFFSET += INSPECTOR_PAGE; const resp = await window.adblockxBridge.queryLogs({ limit: INSPECTOR_PAGE, offset: INSPECTOR_OFFSET, q: inspectorFilter.value, type: inspectorType.value }); const moreLogs = Array.isArray(resp.entries) ? resp.entries : []; INSPECTOR_CACHE = INSPECTOR_CACHE.concat(moreLogs); INSPECTOR_TOTAL = resp.total || INSPECTOR_TOTAL; renderInspectorList(); }catch(e){ console.error(e); } });
+          inspectorList.appendChild(more);
+        }
+      }catch(e){ console.error(e); }
+    }
+
+    inspectorRefresh.addEventListener('click', refreshInspector);
+    inspectorFilter.addEventListener('input', ()=>{ renderInspectorList(); });
+    inspectorType.addEventListener('change', ()=>{ renderInspectorList(); });
+
+    inspectorExport.addEventListener('click', async ()=>{
+      try{
+        const logs = await window.adblockxBridge.getLogs();
+        const data = JSON.stringify(logs || [], null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'adblockx-battle-logs.json'; a.click(); URL.revokeObjectURL(url);
+      }catch(e){ showToast('EXTRACTION FAILED: '+e); }
+    });
+
+    // refresh logs (fetch from main)
+    async function refreshLogs(){ try{ const logs = await window.adblockxBridge.getLogs(); logsEl.innerHTML=''; if(!logs || !logs.length) { logsEl.innerHTML = '<div class="muted">NO BATTLE RECORDS</div>'; return; } for(const l of logs){ const div = document.createElement('div'); div.className='log-entry'; div.textContent = (l.t||'') + ' — ' + (l.type||'') + ' ' + (l.url||'') + ' ' + (l.rule||''); div.style.cursor='pointer'; div.addEventListener('click', async ()=>{ try{ const full = await window.adblockxBridge.getLog(l.id); showToast(JSON.stringify(full, null, 2)); }catch(e){ showToast('FAILED TO FETCH LOG'); } }); logsEl.appendChild(div); } }catch(e){ console.error(e); } }
+    // add a refresh logs button into UI (if missing create a small one)
+    const rl = document.createElement('button'); rl.textContent='REFRESH LOGS'; rl.className='small ghost'; rl.id='refreshLogs'; 
+    const logsActions = document.querySelector('#logs').previousElementSibling;
+    if (logsActions) {
+      logsActions.prepend(rl);
+      rl.addEventListener('click', refreshLogs);
+    }
+
+    testConn.addEventListener('click', async ()=>{
+      const u = proxyUrl.value.replace(/\/\/$/, '') || 'http://127.0.0.1:4000';
+      try{ const r = await fetch(u + '/health'); if(!r.ok) throw new Error('no'); const data = await r.json(); showToast('LINK ESTABLISHED: ' + JSON.stringify(data)); }catch(e){ showToast('LINK FAILED: ' + String(e)); }
+    });
+
+    // logs from localStorage
+    function readLogs(){ try{ const logs = loadJSON('AdBlockX.LOGS', { blocked:[], spoofed:[], observed:[] }); const entries = [];
+        (logs.blocked||[]).slice(-200).reverse().forEach(l=>entries.push({type:'eliminated', item:l}));
+        (logs.spoofed||[]).slice(-200).reverse().forEach(l=>entries.push({type:'spoofed', item:l}));
+        (logs.observed||[]).slice(-200).reverse().forEach(l=>entries.push({type:'observed', item:l}));
+        return entries;
+      }catch(e){ return []; } }
+
+    function renderLogs(){ logsEl.innerHTML=''; const entries = readLogs(); if(!entries.length){ logsEl.innerHTML = '<div class="muted">NO BATTLE RECORDS YET</div>'; return; }
+      for(const e of entries){ const div = document.createElement('div'); div.className='log-entry'; div.textContent = (e.item.t||new Date().toISOString()) + ' — ' + (e.type||'').toUpperCase() + ' ' + (typeof e.item === 'string' ? e.item : (e.item.url || JSON.stringify(e.item))); logsEl.appendChild(div); }
+    }
+
+    clearLogs.addEventListener('click', ()=>{ if(!confirm('PURGE LOCAL BATTLE RECORDS?')) return; localStorage.setItem('AdBlockX.LOGS', JSON.stringify({ blocked:[], spoofed:[], observed:[] })); renderLogs(); });
+    exportLogs.addEventListener('click', ()=>{ const data = localStorage.getItem('AdBlockX.LOGS') || '{}'; const blob = new Blob([data], { type:'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'adblockx-battle-logs.json'; a.click(); URL.revokeObjectURL(url); });
+
+    insertBait.addEventListener('click', ()=>{ const b = document.createElement('div'); b.className='ad-bait'; b.textContent='[ENEMY BAIT]'; b.style.cssText='width:300px;height:50px;background:#330000;border:2px solid #ff0000;margin:8px;padding:6px;color:#ff3333;'; document.body.appendChild(b); showToast('ENEMY BAIT DEPLOYED'); });
+    simulateAnti.addEventListener('click', ()=>{ window.blockAdBlock = true; window.dispatchEvent(new CustomEvent('AdBlockX:event', { detail: { type: 'simulated-inline', message: 'hostile anti-adblock detected' } })); showToast('ENEMY SIMULATION ACTIVE'); });
+
+    // initial load
+    refreshRuntimeStatus(); loadTab(activeTab); renderLogs();
+
+    // --- Feature toggles implementation ---
+    const FEATURES = [
+      { id: 'ft_enabled', key: KEYS.ENABLED, label: 'AdBlockX Core Systems', def: true },
+      { id: 'ft_watchdog', key: KEYS.WATCHDOG, label: 'Watchdog (hunt & destroy slipped ads)', def: false },
+      { id: 'ft_hyper', key: KEYS.HYPER, label: 'Hypernova (aggressive DOM annihilation)', def: false },
+      { id: 'ft_arch', key: 'AdBlockX.ARCHBALLISTIC', label: 'Archballistic (network-level decimation)', def: false },
+      { id: 'ft_enforcer', key: 'AdBlockX.ENFORCER_ENABLED', label: 'Enforcer (promote hosts to permanent blacklist)', def: false },
+      { id: 'ft_strict', key: 'AdBlockX.STRICT_ENFORCER', label: 'Strict Enforcer (brutal DOM prevention)', def: false },
+      { id: 'ft_prescan', key: 'AdBlockX.PRESCAN_REMOTE_IMPORTS', label: 'Prescan remote imports for threats', def: false },
+      { id: 'ft_allow_foreign', key: 'AdBlockX.ALLOW_FOREIGN_IMPORTS', label: 'Allow foreign script imports', def: false },
+      { id: 'ft_autoinject', key: 'AdBlockX.AUTO_INJECT', label: 'Auto-inject runtime on YouTube', def: true }
+    ];
+
+    const ftContainer = document.getElementById('featureToggles');
+
+    function renderFeatureToggles(){
+      ftContainer.innerHTML = '';
+      for(const f of FEATURES){
+        const row = document.createElement('div'); row.className = 'row';
+        const label = document.createElement('label'); 
+        label.style.width = '280px'; 
+        label.textContent = f.label;
+        label.className = 'hellfire-text';
+        label.setAttribute('data-text', f.label);
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = f.id; cb.style.marginRight = '10px';
+        const cur = loadJSON(f.key, f.def); cb.checked = !!cur;
+        cb.addEventListener('change', ()=>{
+          try{
+            saveJSON(f.key, cb.checked);
+            const obj = {}; obj[f.key] = cb.checked;
+            if(window.adblockxBridge && window.adblockxBridge.propagateSettings) window.adblockxBridge.propagateSettings(obj);
+            // if this is the AUTO_INJECT flag, inform main process
+            try{ if(f.key === 'AdBlockX.AUTO_INJECT' && window.adblockxBridge && window.adblockxBridge.setAutoInject) window.adblockxBridge.setAutoInject(cb.checked); }catch(e){}
+            if(f.key === 'AdBlockX.AUTO_INJECT') showToast('AUTO-INJECT ' + (cb.checked ? 'ENGAGED' : 'DISENGAGED'));
+            // reflect some immediate UI labels
+            if(f.key === KEYS.ENABLED) refreshRuntimeStatus();
+          }catch(e){}
+        });
+
+        const wrapper = document.createElement('div'); wrapper.className='row'; wrapper.appendChild(cb); wrapper.appendChild(label);
+        row.appendChild(wrapper);
+        ftContainer.appendChild(row);
+      }
+    }
+
+    renderFeatureToggles();
+
+    // toast helper
+    function showToast(msg, ms=3000){ try{ const t = document.getElementById('abxToast'); t.textContent = msg; t.style.opacity = '1'; t.style.transform='translateY(0)'; setTimeout(()=>{ try{ t.style.opacity='0'; t.style.transform='translateY(20px)'; }catch(e){} }, ms); }catch(e){} }
+
+    // For web version: define window.adblockxBridge if not present (e.g., in browser)
+    if (!window.adblockxBridge) {
+      window.adblockxBridge = {
+        startServices: async () => { showToast('BATTLE SYSTEMS ENGAGED (web mode)'); return true; },
+        stopServices: async () => { showToast('BATTLE SYSTEMS DISENGAGED (web mode)'); return true; },
+        navigateContent: async (url) => { window.open(url, '_blank'); },
+        injectRuntime: async () => { showToast('VENOM INJECTION NOT AVAILABLE IN WEB MODE'); return false; },
+        toggleNetworkBlocking: async (flag) => { showToast('NETWORK DECIMATION ' + (flag ? 'ENGAGED' : 'DISENGAGED') + ' (web mode)'); return true; },
+        setFilters: async (filters) => { showToast('FILTERS DEPLOYED (web mode)'); return true; },
+        getLogs: async () => { return fetch('/api/logs').then(r => r.json()); },
+        getLog: async (id) => { return fetch('/api/logs').then(r => r.json()).then(logs => logs.find(l => l.id === id)); },
+        queryLogs: async (opts) => { return fetch('/api/logs').then(r => r.json()).then(logs => ({ total: logs.length, entries: logs.slice(opts.offset || 0, (opts.offset || 0) + (opts.limit || 100)) })); },
+        inspectorSummary: async () => { return fetch('/api/stats').then(r => r.json()); },
+        subsList: async () => { return []; },
+        subsAdd: async (sub) => { showToast('BATTALION CONSCRIPTED (web mode)'); return true; },
+        subsRemove: async (url) => { showToast('BATTALION DISCHARGED (web mode)'); return true; },
+        subsUpdateNow: async () => { showToast('FORCES UPDATED (web mode)'); return true; },
+        checkoutProvider: async (provider) => { showToast('ACQUISITION FOR ' + provider.toUpperCase() + ' (web mode)'); return { checkoutUrl: '#' }; },
+        restorePurchase: async (proof) => { showToast('POWER RESTORED (web mode)'); return { ok: true }; },
+        getEntitlement: async (userId) => { return { ok: true, canonical: { plan: 'RAGE', expiresAt: Date.now() + 365*24*60*60*1000 } }; },
+        propagateSettings: async (settings) => { console.log('SETTINGS PROPAGATED (web mode)', settings); },
+        setAutoInject: async (flag) => { showToast('AUTO-INJECT ' + (flag ? 'ENGAGED' : 'DISENGAGED') + ' (web mode)'); }
+      };
+    }
+
+    // listen for initial config from main and set UI states accordingly
+    window.addEventListener('abx:initial-config', (ev) => {
+      try{
+        const d = ev.detail || {};
+        const auto = d.autoInject || (d.config && d.config.autoInject);
+        if(typeof auto !== 'undefined'){
+          const el = document.getElementById('ft_autoinject'); if(el) el.checked = !!auto; showToast('AUTO-INJECT IS ' + (el.checked ? 'ENGAGED' : 'DISENGAGED'));
+        }
+      }catch(e){}
+    });
+
+    // update logs periodically with rage-themed updates
+    setInterval(renderLogs, 3000);
+
+    // Add some rage-themed easter eggs and interactions
+    let rageLevel = 0;
+    document.addEventListener('click', () => {
+      rageLevel++;
+      if (rageLevel > 10 && Math.random() < 0.1) {
+        document.body.style.animation = 'shake-rage 0.5s';
+        setTimeout(() => document.body.style.animation = '', 500);
+        rageLevel = 0;
+      }
+    });
+
+    // Add periodic flame effects
+    setInterval(() => {
+      if (Math.random() < 0.3) {
+        const flames = ['🔥', '⚡', '💥', '👹'];
+        const flame = flames[Math.floor(Math.random() * flames.length)];
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        
+        const el = document.createElement('div');
+        el.textContent = flame;
+        el.style.cssText = `
+          position: fixed;
+          left: ${x}px;
+          top: ${y}px;
+          font-size: 20px;
+          pointer-events: none;
+          z-index: 9999;
+          animation: flame-flicker 1s ease-out forwards;
+          opacity: 0.7;
+        `;
+        document.body.appendChild(el);
+        
+        setTimeout(() => {
+          if (el.parentNode) el.parentNode.removeChild(el);
+        }, 1000);
+      }
+    }, 5000);
+
+    // Add hover sound effects simulation through visual feedback
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('mouseenter', () => {
+        if (Math.random() < 0.3) {
+          btn.style.textShadow = '0 0 10px #ff0000, 0 0 20px #ff0000';
+          setTimeout(() => {
+            btn.style.textShadow = '1px 1px 2px rgba(0,0,0,0.8)';
+          }, 200);
+        }
+      });
+    });
+
+    // SCROLL PROGRESS INDICATOR
+    function updateScrollProgress() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / scrollHeight) * 100;
+      const progressBar = document.querySelector('.scroll-progress-bar');
+      if (progressBar) {
+        progressBar.style.setProperty('--scroll-progress', scrollPercent + '%');
+        progressBar.style.width = scrollPercent + '%';
+      }
+    }
+
+    // SCROLL-TRIGGERED ANIMATIONS
+    function handleScrollAnimations() {
+      const elements = document.querySelectorAll('.animate-fade-in, .animate-slide-down, .animate-slide-up, .animate-slide-left, .animate-slide-right, .animate-card-slide-right, .animate-grid-reveal');
+      
+      elements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight - 100;
+        
+        if (isVisible && !element.classList.contains('animated')) {
+          element.classList.add('animated');
+        }
+      });
+    }
+
+    // INTERSECTION OBSERVER FOR BETTER PERFORMANCE
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated');
+        }
+      });
+    }, observerOptions);
+
+    // Initialize animations on load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add scroll progress indicator
+      const scrollProgress = document.createElement('div');
+      scrollProgress.className = 'scroll-progress';
+      scrollProgress.innerHTML = '<div class="scroll-progress-bar"></div>';
+      document.body.insertBefore(scrollProgress, document.body.firstChild);
+
+      // Observe elements for scroll animations
+      const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-down, .animate-slide-up, .animate-slide-left, .animate-slide-right, .animate-card-slide-right, .animate-grid-reveal');
+      animatedElements.forEach(el => observer.observe(el));
+
+      // Initial scroll check
+      updateScrollProgress();
+      handleScrollAnimations();
+    });
+
+    // Scroll event listeners
+    window.addEventListener('scroll', function() {
+      updateScrollProgress();
+      handleScrollAnimations();
+    });
+
+    // PERFORMANCE OPTIMIZATION - THROTTLE SCROLL EVENTS
+    let scrollTimeout;
+    function throttledScroll() {
+      if (!scrollTimeout) {
+        scrollTimeout = setTimeout(function() {
+          updateScrollProgress();
+          handleScrollAnimations();
+          scrollTimeout = null;
+        }, 16); // ~60fps
+      }
+    }
+
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+
+    // ENHANCED CHAOS OVERLAY ANIMATIONS
+    function initializeChaosOverlay() {
+      const overlay = document.querySelector('.chaos-overlay');
+      if (!overlay) return;
+
+      // Add floating elements dynamically
+      const elements = [
+        { class: 'floating-explosion', html: '💥', top: '30%', right: '10%', delay: '1s' },
+        { class: 'floating-target', html: '🎯', bottom: '25%', left: '25%', delay: '2.5s' },
+        { class: 'energy-waves', html: '', top: '50%', left: '50%', delay: '0s' }
+      ];
+
+      elements.forEach(element => {
+        if (!document.querySelector('.' + element.class)) {
+          const div = document.createElement('div');
+          div.className = element.class;
+          div.innerHTML = element.html;
+          if (element.top) div.style.top = element.top;
+          if (element.right) div.style.right = element.right;
+          if (element.bottom) div.style.bottom = element.bottom;
+          if (element.left) div.style.left = element.left;
+          if (element.delay) div.style.animationDelay = element.delay;
+          overlay.appendChild(div);
+        }
+      });
+    }
+
+    // Initialize chaos overlay
+    document.addEventListener('DOMContentLoaded', initializeChaosOverlay);
+
+    // THEME TOGGLE FUNCTIONALITY
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'rage' ? 'calm' : 'rage';
+      
+      body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('adblockerx-theme', newTheme);
+      
+      // Update theme toggle button
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.textContent = newTheme === 'rage' ? '☀️ Calm Mode' : '🔥 Rage Mode';
+      }
+    }
+
+    // Load saved theme
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('adblockerx-theme') || 'rage';
+      document.body.setAttribute('data-theme', savedTheme);
+      
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.textContent = savedTheme === 'rage' ? '☀️ Calm Mode' : '🔥 Rage Mode';
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+    });
+
+    // BUTTON HOVER EFFECTS
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+          this.classList.add('animate-button-hover');
+        });
+        
+        button.addEventListener('mouseleave', function() {
+          this.classList.remove('animate-button-hover');
+        });
+      });
+    });
+
+    // FORM VALIDATION AND ENHANCEMENTS
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input[type="text"], textarea');
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          this.classList.add('animate-input-focus');
+        });
+        
+        input.addEventListener('blur', function() {
+          this.classList.remove('animate-input-focus');
+        });
+      });
+    });
+
+    // STATUS UPDATES WITH ANIMATIONS
+    function updateStatus(message, type = 'info') {
+      const statusDiv = document.getElementById('status-display');
+      if (statusDiv) {
+        statusDiv.textContent = message;
+        statusDiv.className = `status-display animate-status-pulse status-${type}`;
+        
+        // Remove animation class after animation completes
+        setTimeout(() => {
+          statusDiv.classList.remove('animate-status-pulse');
+        }, 2000);
+      }
+    }
+
+    // Make updateStatus globally available
+    window.updateStatus = updateStatus;
+  </script>
+</body>
+</html>

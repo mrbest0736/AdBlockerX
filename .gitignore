@@ -1,4 +1,7 @@
-*.tar
+.env
+node_modules/
+/.vscode
+npm-debug.log*.tar
 *.tar.*
 *.jar
 *.exe
@@ -11,3 +14,5 @@
 
 pkg/
 src/
+
+server/keys/

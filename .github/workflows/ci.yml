@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start server and agent in background
+        run: |
+          export X_API_KEY=ci-test
+          # start main server
+          node server.js &
+          # start node agent
+          node node_agent.js &
+          echo "Waiting for server and agent..."
+          for i in {1..30}; do
+            ok=0
+            if curl --silent --fail http://127.0.0.1:4000/health >/dev/null 2>&1; then ok=$((ok+1)); fi
+            if curl --silent --fail http://127.0.0.1:4100/health >/dev/null 2>&1; then ok=$((ok+1)); fi
+            if [ "$ok" -eq 2 ]; then echo "Both ready"; break; fi
+            sleep 1
+          done
+
+      - name: Run smoke test
+        run: |
+          export X_API_KEY=ci-test
+          node test_proxy.js
+
+      - name: Run Puppeteer E2E
+        run: |
+          export X_API_KEY=ci-test
+          npm run e2e
+
+      - name: Upload logs (if any)
+        if: failure()
+        run: ls -la

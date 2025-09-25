@@ -1,0 +1,37 @@
+{
+  "name": "adblockx-proxy",
+  "version": "0.1.0",
+  "description": "Lightweight proxy server for server-side enforcement for AdBlockX (demo)",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "agent": "node node_agent.js",
+  "test": "mocha --recursive",
+  "e2e": "node ./e2e/puppeteer_smoke.js",
+  "e2e:yt": "node ./e2e/puppeteer_yt_smoke.js",
+    "app": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "active-win": "^8.2.1",
+    "axios": "^1.6.4",
+    "body-parser": "^1.20.2",
+    "ci": "^2.3.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.7",
+    "stripe": "^12.12.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.8",
+    "electron": "^38.1.2",
+    "mocha": "^10.2.0",
+    "puppeteer": "^24.22.0",
+    "serve": "^14.2.0"
+  }
+}

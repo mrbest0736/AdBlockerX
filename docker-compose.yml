@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  server:
+    build: .
+    ports:
+      - "8080:4000"
+    environment:
+      - X_API_KEY=changeme
+    volumes:
+      - ./:/usr/src/app
+  demo:
+    image: node:16-alpine
+    working_dir: /usr/src/app
+    command: sh -c "npm install -g serve && serve -s . -l 5000"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/usr/src/app
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    ports:
+      - "4100:4100"
+    environment:
+      - X_API_KEY=changeme
+      - NODE_AGENT_UPSTREAM_URL=
+    volumes:
+      - ./:/usr/src/app
