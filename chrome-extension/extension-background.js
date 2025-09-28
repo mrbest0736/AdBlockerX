@@ -48,10 +48,20 @@ chrome.runtime.onInstalled.addListener(() => {
   installDefaultRules();
 });
 
-// Simple message bridge to allow page scripts to communicate via chrome.runtime.sendMessage
+// Handle messages from popup
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg && msg.type === 'AdBlockX:getStatus') {
     sendResponse({ installed: true, rulesInstalled: true });
+  } else if (msg.action === 'enableNetworkRules') {
+    installDefaultRules();
+    sendResponse({ success: true });
+  } else if (msg.action === 'disableNetworkRules') {
+    // Remove all dynamic rules
+    chrome.declarativeNetRequest.getDynamicRules().then(rules => {
+      const ruleIds = rules.map(rule => rule.id);
+      chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: ruleIds });
+    });
+    sendResponse({ success: true });
   }
   return true;
 });

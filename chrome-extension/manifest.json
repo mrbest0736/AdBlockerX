@@ -21,5 +21,12 @@
   "action": {
     "default_title": "AdBlockX Prototype",
     "default_popup": "popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["AdBlockerX.js", "content-bridge.js"],
+      "run_at": "document_start"
+    }
+  ]
 }

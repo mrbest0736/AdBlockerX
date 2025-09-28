@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdBlockX</title>
+  <style>
+    body { width: 300px; padding: 10px; font-family: Arial, sans-serif; }
+    .button { padding: 5px 10px; margin: 2px; cursor: pointer; }
+    .status { margin: 5px 0; padding: 5px; background: #f0f0f0; }
+    textarea { width: 100%; height: 100px; }
+    .row { display: flex; gap: 5px; }
+  </style>
+</head>
+<body>
+  <h3>AdBlockX - Rage Mode</h3>
+
+  <div class="status">
+    Status: <span id="status">Loading...</span>
+  </div>
+
+  <button id="toggleEnable" class="button">Toggle Ad Blocking</button>
+  <button id="injectRuntime" class="button">Inject into Current Page</button>
+
+  <h4>Network Blocking</h4>
+  <label><input type="checkbox" id="netBlocking"> Enable Network Decimation</label>
+
+  <h4>Custom Filters</h4>
+  <textarea id="filterEditor" placeholder="example.com/ads&#10;/.*doubleclick\.net/"></textarea>
+  <div class="row">
+    <button id="applyFilters" class="button">Apply Filters</button>
+    <button id="clearFilters" class="button">Clear Filters</button>
+  </div>
+  <div>Blocked: <span id="blockedCount">0</span></div>
+
+  <script src="popup.js"></script>
+</body>
+</html></content>
+<parameter name="filePath">c:\Users\abest\OneDrive\Documents\GitHub\AdBlockerX\chrome-extension\popup.html

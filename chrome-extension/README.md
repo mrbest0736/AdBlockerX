@@ -1,24 +1,42 @@
-# AdBlockX Chrome Extension Prototype
+# AdBlockX Chrome Extension
 
-This folder contains a minimal Chrome extension sketch showing how Service Worker / in-page blocking can be moved to a browser extension for stronger, network-level enforcement.
+A complete Chrome extension that integrates the AdBlockerX runtime for advanced ad blocking.
 
-Files:
+## Files
 
-- manifest.json - MV3 manifest requesting webRequest + declarativeNetRequest permissions and a background service worker.
-- extension-background.js - Minimal background service worker that installs simple blocking rules via declarativeNetRequest and listens for messages from the page.
+- `manifest.json` - Manifest V3 configuration with content scripts and permissions
+- `extension-background.js` - Service worker handling network rules and messaging
+- `popup.html` - Extension popup interface
+- `popup.js` - Popup script for user controls
+- `AdBlockerX.js` - Main ad blocking runtime
+- `content-bridge.js` - Bridge between popup and AdBlockerX runtime
 
-How to load for testing (Chrome/Edge):
+## Features
 
-1. Open chrome://extensions
+- **Network-level blocking** via declarativeNetRequest (blocks ad URLs before they load)
+- **Runtime injection** with fetch/XMLHttpRequest hooks for comprehensive blocking
+- **Custom filter rules** with regex support
+- **Popup control interface** for enabling/disabling and configuration
+
+## Installation
+
+1. Open `chrome://extensions`
 2. Enable "Developer mode"
-3. Click "Load unpacked" and select this `chrome-extension/` folder
-4. The extension will install and the background worker should log to the extension's service worker console.
+3. Click "Load unpacked" and select this folder
+4. The extension will install with a toolbar icon
 
-Notes & next steps:
+## Usage
 
-- declarativeNetRequest has limits (rule counts) and differs by browser; for production consider using native webRequest/blocking APIs where permitted or multiple rule sets.
-- This is a sketch. To integrate fully, you'll want to implement:
-  - sync rules from your app (e.g., via chrome.storage)
-  - UI popup or options page for control
-  - messaging bridge securely authenticated between page and extension
-  - packaging and release flows for Chrome Web Store / Edge Add-ons
+- Click the extension icon to open the popup
+- Toggle ad blocking on/off
+- Enable network decimation for URL-based blocking
+- Add custom filters in the textarea (one per line, use `/pattern/` for regex)
+- Use "Inject into Current Page" to manually inject blocking on any page
+
+## Permissions
+
+- `declarativeNetRequest` - Network-level ad blocking
+- `storage` - Save settings and filters
+- `scripting` - Inject AdBlockerX runtime
+- `tabs` - Access current tab for injection
+- `host_permissions: <all_urls>` - Block ads on all websites
