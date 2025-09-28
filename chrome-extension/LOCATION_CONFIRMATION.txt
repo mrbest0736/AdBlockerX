@@ -1,0 +1,1 @@
+This file confirms the chrome-extension folder exists and is accessible.
