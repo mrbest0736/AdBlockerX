@@ -9,6 +9,7 @@
     initialized: false,
     stats: {
       requestsBlocked: 0,
+      requestsDeflected: 0,
       requestsAllowed: 0,
       bypassAttempts: 0,
       lastActivity: Date.now(),
@@ -23,6 +24,14 @@
         strictMode: true,
         blockAllAds: true,
         allowList: ['content-delivery-networks', 'essential-services']
+      ,
+        // Deflection controls: 'block' | 'spoof' | 'redirect'
+        deflection: {
+          enabled: false,
+          mode: 'spoof', // 'spoof' (return harmless payload), 'redirect' (rewrite URL), 'block' (204)
+          // when redirect mode is used and redirectTarget is set, the request will be rewritten to this URL
+          redirectTarget: ''
+        }
       },
       RUNTIME_LEVEL: {
         enabled: true,
@@ -80,6 +89,15 @@
       /\b(ad|ads|advert)\b/i
     ],
 
+    // Default spoof responses for common endpoints when deflection.mode === 'spoof'
+    SPOOF_RESPONSES: [
+      { pattern: /youtube\.com\/api\/stats\/ads/i, body: JSON.stringify({ ad: false }), headers: { 'Content-Type': 'application/json' }, status: 200 },
+      { pattern: /youtubei\/v1\/player/i, body: JSON.stringify({ playabilityStatus: { status: 'OK' } }), headers: { 'Content-Type': 'application/json' }, status: 200 },
+      { pattern: /doubleclick\.net/i, body: '', headers: {}, status: 204 },
+      { pattern: /googlesyndication\.com/i, body: '', headers: {}, status: 204 },
+      { pattern: /pagead2?\//i, body: '', headers: {}, status: 204 }
+    ],
+
     // Initialize ConX system
     init: function() {
       if (this.initialized) return;
@@ -101,7 +119,7 @@
     setupNetworkMonitoring: function() {
       const self = this;
 
-      // Monitor fetch requests
+      // Monitor fetch requests with optional deflection
       const originalFetch = window.fetch;
       window.fetch = function(...args) {
         const url = args[0] instanceof Request ? args[0].url : args[0];
@@ -111,7 +129,40 @@
           self.stats.domains.add(self.extractDomain(url));
           console.log('%c[ConX] BLOCKED (fetch): ' + url, 'color:#ff0000;');
 
-          // Return blocked response
+          // Deflection handling
+          try {
+            const def = (self.PROTOCOLS && self.PROTOCOLS.NETWORK_LEVEL && self.PROTOCOLS.NETWORK_LEVEL.deflection) || {};
+            if (def.enabled) {
+              self.stats.requestsDeflected = (self.stats.requestsDeflected || 0) + 1;
+              if (def.mode === 'redirect' && def.redirectTarget) {
+                const redirectUrl = def.redirectTarget;
+                console.log('%c[ConX] DEFLECT (fetch->redirect): ' + url + ' -> ' + redirectUrl, 'color:#ffaa00;');
+                // Rewrite request to redirect target
+                const newArgs = args.slice();
+                newArgs[0] = redirectUrl;
+                self.stats.requestsAllowed++;
+                return originalFetch.apply(this, newArgs);
+              }
+
+              if (def.mode === 'spoof') {
+                // Find a spoof response matching the URL
+                for (const s of (self.SPOOF_RESPONSES || [])) {
+                  try {
+                    if (s.pattern.test(url)) {
+                      console.log('%c[ConX] DEFLECT (fetch->spoof): ' + url, 'color:#ffaa00;');
+                      const headers = new Headers(s.headers || {});
+                      const body = typeof s.body === 'string' ? s.body : JSON.stringify(s.body);
+                      return Promise.resolve(new Response(body, { status: s.status || 200, headers }));
+                    }
+                  } catch (e) {}
+                }
+                // fallback: 204
+                return Promise.resolve(new Response('', { status: 204, statusText: 'No Content (ConX Deflected)' }));
+              }
+            }
+          } catch (e) { console.warn('deflection handling failed', e); }
+
+          // Default: Block
           return Promise.resolve(new Response('', {
             status: 204,
             statusText: 'No Content (ConX Blocked)'
@@ -122,32 +173,73 @@
         return originalFetch.apply(this, args);
       };
 
-      // Monitor XMLHttpRequest
+      // Monitor XMLHttpRequest with optional deflection
       const originalOpen = XMLHttpRequest.prototype.open;
       XMLHttpRequest.prototype.open = function(method, url, ...args) {
-        if (self.shouldBlockRequest(url)) {
-          self.stats.requestsBlocked++;
-          self.stats.domains.add(self.extractDomain(url));
-          console.log('%c[ConX] BLOCKED (XHR): ' + url, 'color:#ff0000;');
+        try {
+          if (self.shouldBlockRequest(url)) {
+            self.stats.requestsBlocked++;
+            self.stats.domains.add(self.extractDomain(url));
+            console.log('%c[ConX] BLOCKED (XHR): ' + url, 'color:#ff0000;');
 
-          // Mark for blocking in send()
-          this._conxBlocked = true;
-        }
+            const def = (self.PROTOCOLS && self.PROTOCOLS.NETWORK_LEVEL && self.PROTOCOLS.NETWORK_LEVEL.deflection) || {};
+            if (def.enabled) {
+              self.stats.requestsDeflected = (self.stats.requestsDeflected || 0) + 1;
+              if (def.mode === 'redirect' && def.redirectTarget) {
+                // rewrite URL stored for send
+                this._conxRedirectTo = def.redirectTarget;
+                console.log('%c[ConX] DEFLECT (XHR->redirect): ' + url + ' -> ' + def.redirectTarget, 'color:#ffaa00;');
+              } else if (def.mode === 'spoof') {
+                this._conxSpoof = true;
+                console.log('%c[ConX] DEFLECT (XHR->spoof): ' + url, 'color:#ffaa00;');
+              } else {
+                this._conxBlocked = true;
+              }
+            } else {
+              this._conxBlocked = true;
+            }
+          }
+        } catch (e) { /* ignore */ }
 
         return originalOpen.call(this, method, url, ...args);
       };
 
       const originalSend = XMLHttpRequest.prototype.send;
       XMLHttpRequest.prototype.send = function(...args) {
-        if (this._conxBlocked) {
-          // Abort blocked requests
-          setTimeout(() => {
-            if (this.readyState !== 4) {
-              this.abort();
-            }
-          }, 0);
-          return;
-        }
+        try {
+          if (this._conxBlocked) {
+            // Abort blocked requests
+            setTimeout(() => {
+              if (this.readyState !== 4) {
+                this.abort();
+              }
+            }, 0);
+            return;
+          }
+
+          if (this._conxRedirectTo) {
+            // attempt to reuse open() with redirect target by replacing send with fetch fallback
+            const redirectUrl = this._conxRedirectTo;
+            // Fire a fetch so the XHR consumer will still get network activity (best-effort)
+            setTimeout(() => {
+              try { fetch(redirectUrl).catch(()=>{}); } catch(e){}
+            }, 0);
+            return; // don't call original send for the original blocked URL
+          }
+
+          if (this._conxSpoof) {
+            // emulate a successful empty response
+            setTimeout(() => {
+              try {
+                this.readyState = 4;
+                this.status = 204;
+                if (typeof this.onload === 'function') try { this.onload(); } catch(e){}
+                if (typeof this.onreadystatechange === 'function') try { this.onreadystatechange(); } catch(e){}
+              } catch (e) {}
+            }, 0);
+            return;
+          }
+        } catch (e) {}
 
         return originalSend.apply(this, args);
       };
@@ -330,7 +422,7 @@
       if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
         chrome.runtime.sendMessage({
           type: 'ConX:status',
-          stats: this.stats,
+          stats: this.getStats(),
           action: action
         });
       }
@@ -338,7 +430,11 @@
 
     // Public API
     getStats: function() {
-      return { ...this.stats };
+      // shallow copy, convert Set to array for serialization
+      const s = { ...this.stats };
+      try { s.domains = Array.from(s.domains || []); } catch (e) { s.domains = s.domains; }
+      s.requestsDeflected = s.requestsDeflected || 0;
+      return s;
     },
 
     forceRevalidation: function() {
