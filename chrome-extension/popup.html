@@ -25,6 +25,26 @@
   <h4>Network Blocking</h4>
   <label><input type="checkbox" id="netBlocking"> Enable Network Decimation</label>
 
+  <h4>Deflection</h4>
+  <label><input type="checkbox" id="deflectionEnable"> Enable Deflection</label>
+  <div>
+    Mode:
+    <select id="deflectionMode">
+      <option value="block">Block</option>
+      <option value="spoof">Spoof</option>
+      <option value="redirect">Redirect</option>
+    </select>
+  </div>
+  <div id="redirectRow" style="display:none; margin-top:6px;">
+    Redirect target:
+    <input type="text" id="redirectTarget" placeholder="https://example.com/no-ad.json" style="width:100%" />
+  </div>
+  <div style="margin-top:6px;">
+    Spoof rules (one per line, pattern => body JSON):
+    <textarea id="spoofRules" placeholder="/youtube\.com\/api\/stats\/ads => {\"ad\":false}"></textarea>
+  </div>
+  <div style="margin-top:6px;"><button id="applyDeflection" class="button">Apply Deflection</button></div>
+
   <h4>Custom Filters</h4>
   <textarea id="filterEditor" placeholder="example.com/ads&#10;/.*doubleclick\.net/"></textarea>
   <div class="row">
@@ -32,8 +52,8 @@
     <button id="clearFilters" class="button">Clear Filters</button>
   </div>
   <div>Blocked: <span id="blockedCount">0</span></div>
+  <div>Deflected: <span id="deflectedCount">0</span></div>
 
   <script src="popup.js"></script>
 </body>
-</html></content>
-<parameter name="filePath">c:\Users\abest\OneDrive\Documents\GitHub\AdBlockerX\chrome-extension\popup.html
+</html>

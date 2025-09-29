@@ -44,6 +44,11 @@
   const pendingQueue = [];
   let processingQueue = false;
 
+  // Utility to escape strings for RegExp
+  function escapeRegExp(str) {
+    return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   function enqueueMessage(fn) {
     pendingQueue.push(fn);
     processQueueSoon();
@@ -230,6 +235,87 @@
           break;
         }
 
+        case 'setDeflection': {
+          const def = message.deflection || {};
+          const respond = () => sendResponse({ ok: true });
+          waitFor(() => hasConX(), { timeout: 2000 }).then(() => {
+            try {
+              if (!window.ConX.PROTOCOLS) window.ConX.PROTOCOLS = {};
+              if (!window.ConX.PROTOCOLS.NETWORK_LEVEL) window.ConX.PROTOCOLS.NETWORK_LEVEL = {};
+              // Normalize and apply spoofs if present
+              const toApply = Object.assign({}, window.ConX.PROTOCOLS.NETWORK_LEVEL.deflection || {}, def);
+              if (Array.isArray(def.spoofs) && def.spoofs.length) {
+                // Normalize patterns into RegExp objects where possible
+                const normalized = [];
+                for (const s of def.spoofs) {
+                  try {
+                    let pattern = s.pattern;
+                    let flags = undefined;
+                    if (typeof pattern === 'string') {
+                      // Regex literal like /foo\/bar/i
+                      const m = pattern.match(/^\/(.*)\/(\w*)$/);
+                      if (m) { pattern = m[1]; flags = m[2]; }
+                    }
+
+                    let re = null;
+                    if (typeof pattern === 'string') {
+                      try { re = new RegExp(pattern, flags || 'i'); } catch(e) { re = new RegExp(escapeRegExp(pattern), 'i'); }
+                    } else if (pattern instanceof RegExp) {
+                      re = pattern;
+                    }
+
+                    normalized.push({ pattern: re, status: s.status || 200, headers: s.headers || {}, body: s.body != null ? s.body : '' });
+                  } catch (e) { /* ignore bad entry */ }
+                }
+                toApply.spoofs = normalized;
+                // apply onto ConX.SPOOF_RESPONSES
+                try { window.ConX.SPOOF_RESPONSES = normalized.concat(window.ConX.SPOOF_RESPONSES || []); } catch (e) {}
+              }
+
+              window.ConX.PROTOCOLS.NETWORK_LEVEL.deflection = toApply;
+              if (typeof window.ConX.reportStatus === 'function') window.ConX.reportStatus('deflection:updated');
+            } catch (e) { warn('apply deflection failed', e); }
+            emitRuntimeReady();
+            respond();
+          }).catch(() => {
+            enqueueMessage(async () => {
+              try {
+                if (typeof window.ConX !== 'undefined') {
+                  if (!window.ConX.PROTOCOLS) window.ConX.PROTOCOLS = {};
+                  if (!window.ConX.PROTOCOLS.NETWORK_LEVEL) window.ConX.PROTOCOLS.NETWORK_LEVEL = {};
+                  const toApply = Object.assign({}, window.ConX.PROTOCOLS.NETWORK_LEVEL.deflection || {}, def);
+                  if (Array.isArray(def.spoofs) && def.spoofs.length) {
+                    const normalized = [];
+                    for (const s of def.spoofs) {
+                      try {
+                        let pattern = s.pattern;
+                        let flags = undefined;
+                        if (typeof pattern === 'string') {
+                          const m = pattern.match(/^\/(.*)\/(\w*)$/);
+                          if (m) { pattern = m[1]; flags = m[2]; }
+                        }
+                        let re = null;
+                        if (typeof pattern === 'string') {
+                          try { re = new RegExp(pattern, flags || 'i'); } catch(e) { re = new RegExp(escapeRegExp(pattern), 'i'); }
+                        } else if (pattern instanceof RegExp) {
+                          re = pattern;
+                        }
+                        normalized.push({ pattern: re, status: s.status || 200, headers: s.headers || {}, body: s.body != null ? s.body : '' });
+                      } catch (e) {}
+                    }
+                    toApply.spoofs = normalized;
+                    try { window.ConX.SPOOF_RESPONSES = normalized.concat(window.ConX.SPOOF_RESPONSES || []); } catch (e) {}
+                  }
+
+                  window.ConX.PROTOCOLS.NETWORK_LEVEL.deflection = toApply;
+                }
+              } catch (e) { warn('queued apply deflection failed', e); }
+            });
+            respond();
+          });
+          break;
+        }
+
         default:
           // Unknown action: ignore
           break;
@@ -292,5 +378,19 @@
     } catch (e) { warn('onConnect handler error', e); }
   });
 
+  // Auto-apply saved deflection settings from storage on load
+  try {
+    if (chrome && chrome.storage && chrome.storage.local && typeof chrome.storage.local.get === 'function') {
+      chrome.storage.local.get(['deflection'], function(result) {
+        try {
+          const def = result && result.deflection;
+          if (!def) return;
+          // Reuse existing setDeflection handler by sending a runtime message to self
+          // This will queue or apply depending on ConX presence
+          chrome.runtime.sendMessage({ action: 'setDeflection', deflection: def }, function(resp) { dbg('auto-applied deflection', !!resp && resp.ok); });
+        } catch (e) { warn('auto-apply deflection failed', e); }
+      });
+    }
+  } catch (e) {}
 })();
 
