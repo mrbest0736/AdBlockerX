@@ -12,6 +12,12 @@ const defaultBlockHosts = [
 // Add simple blocking rules via declarativeNetRequest (fast, supported in MV3)
 async function installDefaultRules() {
   try {
+    // Define rule IDs that will be used
+    const ruleIds = [1000, 1001, 1002, 1003, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 3001, 3002, 3003];
+    
+    // Remove existing rules with these IDs first
+    await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: ruleIds });
+    
     const rules = defaultBlockHosts.map((pattern, idx) => ({
       id: 1000 + idx,
       priority: 1,
