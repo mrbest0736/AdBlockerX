@@ -7,8 +7,6 @@
     "storage",
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
-    "webRequest",
-    "webRequestBlocking",
     "scripting",
     "tabs"
   ],
