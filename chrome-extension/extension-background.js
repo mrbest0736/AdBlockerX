@@ -6,14 +6,43 @@ const defaultBlockHosts = [
   '*://*.doubleclick.net/*',
   '*://*.googlesyndication.com/*',
   '*://*.pagead2.googlesyndication.com/*',
-  '*://*.googleadservices.com/*'
+  '*://*.googleadservices.com/*',
+  '*://*.amazon-adsystem.com/*',
+  '*://*.facebook.com/tr/*',
+  '*://*.facebook.net/*',
+  '*://*.outbrain.com/*',
+  '*://*.taboola.com/*',
+  '*://*.criteo.com/*',
+  '*://*.pubmatic.com/*',
+  '*://*.openx.net/*',
+  '*://*.adsystem.amazon.com/*',
+  '*://*.googletagmanager.com/*',
+  '*://*.googletagservices.com/*',
+  '*://*.google-analytics.com/*',
+  '*://*.scorecardresearch.com/*',
+  '*://*.quantserve.com/*',
+  '*://*.hotjar.com/*',
+  '*://*.ads-twitter.com/*',
+  '*://*.t.co/*',
+  '*://*.pinterest.com/*',
+  '*://*.linkedin.com/*',
+  '*://*.ads.linkedin.com/*',
+  '*://*.bing.com/*',
+  '*://*.microsoft.com/*',
+  '*://*.yahoo.com/*',
+  '*://*.aol.com/*',
+  '*://*.advertising.com/*',
+  '*://*.thetrade.com/*'
 ];
 
 // Add simple blocking rules via declarativeNetRequest (fast, supported in MV3)
 async function installDefaultRules() {
   try {
-    // Define rule IDs that will be used
-    const ruleIds = [1000, 1001, 1002, 1003, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 3001, 3002, 3003];
+    // Define rule IDs that will be used (expanded for more rules)
+    const ruleIds = [];
+    for (let i = 1000; i < 1000 + defaultBlockHosts.length; i++) ruleIds.push(i);
+    for (let i = 2001; i <= 2008; i++) ruleIds.push(i);
+    for (let i = 3001; i <= 3003; i++) ruleIds.push(i);
     
     // Remove existing rules with these IDs first
     await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: ruleIds });

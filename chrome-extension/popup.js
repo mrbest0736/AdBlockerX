@@ -15,6 +15,17 @@ document.addEventListener('DOMContentLoaded', function() {
     netBlockingCb.checked = result.netBlocking || false;
     filterEditor.value = result.filters || '';
     blockedCountEl.textContent = result.blockedCount || 0;
+
+    // Get ConX stats
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: 'getStats' }, function(response) {
+        if (response && response.conx) {
+          const conxStats = response.conx;
+          blockedCountEl.textContent = conxStats.requestsBlocked || 0;
+          statusEl.textContent = (result.enabled && conxStats.requestsBlocked > 0) ? 'ACTIVE (ConX)' : 'DORMANT';
+        }
+      });
+    });
   });
 
   // Toggle ad blocking
